@@ -1,17 +1,24 @@
 import { Box, Heading, VStack, useColorModeValue, Container, Input } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Button } from '@chakra-ui/react'
+import { useProductStore } from "../store/product";
+
+
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
-    imageUrl: ""
+    image: ""
   });
 
-  const handleAddProduct = () => {
-    console.log(newProduct);  
-  }
+  const { createProduct } = useProductStore();
+
+  const handleAddProduct = async() => {
+    const  {success, message} = await createProduct(newProduct);
+    console.log("Success:", success);
+    console.log("Message:", message);
+  };
 
   return (
     <Container maxW = {"container.sm"}>
@@ -45,14 +52,14 @@ const CreatePage = () => {
           </VStack>
 
           <VStack spacing={4}>
-            <Input
+           <Input
               placeholder="Image URL"
-              name="imageUrl"
+              name="image"
               value={newProduct.image}
-              onChange={(e) => setNewProduct({ ...newProduct, imageUrl: e.target.value })}
+              onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
             />
 
-          <Button colorSchema = 'blue' onClick = {handleAddProduct} w={'full'}>
+            <Button colorScheme='blue' onClick={handleAddProduct} w={'full'}>
               Add Product
             </Button>
           </VStack>
